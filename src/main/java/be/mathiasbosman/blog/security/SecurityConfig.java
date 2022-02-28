@@ -20,6 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http.authorizeRequests()
         .antMatchers("/rest/public/**").permitAll()
         .antMatchers("/rest/**").hasAuthority(Authority.API_USER.name())
+        .antMatchers("/actuator/**").permitAll()
         .anyRequest().denyAll();
   }
 
