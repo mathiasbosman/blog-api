@@ -23,8 +23,7 @@ class ExceptionHandlerControllerAdviceTest extends AbstractControllerTest {
 
   @Test
   void testRunTimeException() throws Exception {
-    when(exceptionServiceStub.throwException())
-        .thenThrow(new RuntimeException("foo bar"));
+    when(exceptionServiceStub.throwException()).thenThrow(new RuntimeException("foo bar"));
 
     testExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, "foo bar");
   }

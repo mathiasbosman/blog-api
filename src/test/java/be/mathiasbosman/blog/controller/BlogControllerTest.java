@@ -93,8 +93,7 @@ class BlogControllerTest extends AbstractControllerTest {
     when(repository.findById(any())).thenReturn(Optional.of(new BlogItem("foo", "bar", false)));
     when(repository.save(any())).thenReturn(new BlogItem("foo", "bar", false));
 
-    UUID uuid = UUID.randomUUID();
-    mvc.perform(delete("/rest/item/" + uuid))
+    mvc.perform(delete("/rest/item/" + UUID.randomUUID()))
         .andExpect(status().isOk());
   }
 }
