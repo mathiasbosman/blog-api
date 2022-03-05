@@ -4,3 +4,6 @@ spring:
     username: blog
     password: bl0g
     url: jdbc:postgresql://localhost:7432/blog_db
+
+logging.level:
+  be: trace

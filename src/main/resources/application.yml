@@ -3,3 +3,5 @@ spring:
     banner-mode: off
   application:
     name: blog-api
+  jpa:
+    open-in-view: false

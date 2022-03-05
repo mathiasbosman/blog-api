@@ -1,16 +1,12 @@
 package be.mathiasbosman.blog.domain;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import lombok.Getter;
 import lombok.ToString;
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -20,12 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 @Getter
 @ToString
 @MappedSuperclass
-public abstract class AbstractAuditedEntity implements AuditableEntity {
-
-  @Id
-  @GeneratedValue(generator = "UUID")
-  @GenericGenerator(name = "UUID", strategy = "uuid2")
-  private UUID id;
+public abstract class AbstractAuditedEntity extends AbstractEntity implements AuditableEntity {
 
   @Column(updatable = false)
   @DateTimeFormat(iso = ISO.DATE_TIME)

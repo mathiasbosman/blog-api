@@ -15,13 +15,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Basic controller for the blog.
+ */
 @RestController
 @RequiredArgsConstructor
 public class BlogController {
 
   private final BlogItemService service;
 
-  @GetMapping("rest/items/{page}/{amountPerPage}")
+  @GetMapping("/rest/items/{page}/{amountPerPage}")
   public BlogItemsRecord getBlogItems(@PathVariable int page, @PathVariable int amountPerPage) {
     List<BlogItemRecord> blogItems = service.getItems(false, page, amountPerPage)
         .stream().map(BlogItemRecord::fromEntity).toList();
@@ -37,7 +40,7 @@ public class BlogController {
   @PostMapping("/rest/item/create")
   public BlogItemRecord postItem(@RequestBody @NonNull BlogItemRecord itemRecord) {
     return BlogItemRecord.fromEntity(
-        service.saveNewItem(itemRecord.title(), itemRecord.content()));
+        service.saveNewItem(itemRecord.title(), itemRecord.content(), null));
   }
 
   @PutMapping("/rest/item/update")
@@ -53,3 +56,4 @@ public class BlogController {
   }
 
 }
+

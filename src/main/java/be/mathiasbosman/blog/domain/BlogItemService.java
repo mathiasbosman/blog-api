@@ -9,6 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Service mainly for the {@link BlogItem} entity.
+ */
 @Slf4j
 @Service
 @Transactional
@@ -34,8 +37,12 @@ public class BlogItemService {
   }
 
   @Transactional
-  public BlogItem saveNewItem(String title, String content) {
-    BlogItem item = BlogItem.builder().title(title).content(content).build();
+  public BlogItem saveNewItem(String title, String content, UserAccount poster) {
+    BlogItem item = BlogItem.builder()
+        .title(title)
+        .content(content)
+        .poster(poster)
+        .build();
     log.trace("Saving {}", item);
     return repository.save(item);
   }
