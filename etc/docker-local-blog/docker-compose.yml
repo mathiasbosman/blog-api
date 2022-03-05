@@ -1,0 +1,12 @@
+version: '3.1'
+
+services:
+  blog-local-db:
+    image: postgres
+    restart: always
+    ports:
+      - '7432:5432'
+    environment:
+      POSTGRES_DB: blog_db
+      POSTGRES_USER: blog
+      POSTGRES_PASSWORD: bl0g
