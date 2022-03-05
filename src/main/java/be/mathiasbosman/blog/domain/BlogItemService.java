@@ -55,7 +55,6 @@ public class BlogItemService {
 
   @Transactional
   public BlogItem deleteItem(UUID id) {
-
     return repository.findById(id)
         .map(item -> {
           BlogItem deletedItem = item.toBuilder()

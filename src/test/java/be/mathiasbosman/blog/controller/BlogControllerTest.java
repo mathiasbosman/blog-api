@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import be.mathiasbosman.blog.domain.BlogItem;
+import be.mathiasbosman.blog.domain.BlogItemMother;
 import be.mathiasbosman.blog.domain.BlogItemRecord;
 import be.mathiasbosman.blog.domain.BlogItemRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,8 +36,8 @@ class BlogControllerTest extends AbstractControllerTest {
   @Test
   void getBlogItems() throws Exception {
     when(repository.findAllByDeleted(anyBoolean(), any())).thenReturn(List.of(
-        new BlogItem("foo", "bar", false),
-        new BlogItem("bar", "foo", false)
+        BlogItemMother.blogItem("foo", "bar"),
+        BlogItemMother.blogItem("bar", "foo")
     ));
     when(repository.countAllByDeleted(false)).thenReturn(2L);
 
@@ -52,7 +53,7 @@ class BlogControllerTest extends AbstractControllerTest {
 
   @Test
   void getBlogItem() throws Exception {
-    when(repository.findById(any())).thenReturn(Optional.of(new BlogItem("foo", "bar", false)));
+    when(repository.findById(any())).thenReturn(Optional.of(BlogItemMother.blogItem()));
 
     mvc.perform(get("/rest/item/" + UUID.randomUUID()))
         .andExpect(status().isOk())
@@ -66,7 +67,7 @@ class BlogControllerTest extends AbstractControllerTest {
   @Test
   void postItem() throws Exception {
 
-    when(repository.save(any())).thenReturn(new BlogItem("foo", "bar", false));
+    when(repository.save(any())).thenReturn(BlogItemMother.blogItem());
 
     BlogItemRecord itemRecord = new BlogItemRecord("foo", "bar");
     mvc.perform(post("/rest/item/create")
@@ -77,8 +78,8 @@ class BlogControllerTest extends AbstractControllerTest {
 
   @Test
   void updateItem() throws Exception {
-    when(repository.findById(any())).thenReturn(Optional.of(new BlogItem("foo", "bar", false)));
-    when(repository.save(any())).thenReturn(new BlogItem("foo", "bar", false));
+    when(repository.findById(any())).thenReturn(Optional.of(BlogItemMother.blogItem()));
+    when(repository.save(any())).thenReturn(BlogItemMother.blogItem());
 
     BlogItemRecord itemRecord = new BlogItemRecord("foo", "bar");
     mvc.perform(put("/rest/item/update")
@@ -90,11 +91,10 @@ class BlogControllerTest extends AbstractControllerTest {
   @Test
   void deleteItem() throws Exception {
 
-    when(repository.findById(any())).thenReturn(Optional.of(new BlogItem("foo", "bar", false)));
-    when(repository.save(any())).thenReturn(new BlogItem("foo", "bar", false));
+    when(repository.findById(any())).thenReturn(Optional.of(BlogItemMother.blogItem()));
+    when(repository.save(any())).thenReturn(BlogItemMother.blogItem());
 
-    UUID uuid = UUID.randomUUID();
-    mvc.perform(delete("/rest/item/" + uuid))
+    mvc.perform(delete("/rest/item/" + UUID.randomUUID()))
         .andExpect(status().isOk());
   }
 }
