@@ -14,8 +14,8 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
  * Abstract class for entities that have an audit trail.
  */
 @Getter
-@ToString
 @MappedSuperclass
+@ToString(callSuper = true)
 public abstract class AbstractAuditedEntity extends AbstractEntity implements AuditableEntity {
 
   @Column(updatable = false)

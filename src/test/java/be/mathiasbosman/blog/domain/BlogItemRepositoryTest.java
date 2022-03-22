@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import be.mathiasbosman.blog.AbstractSpringBootTest;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,25 +15,15 @@ class BlogItemRepositoryTest extends AbstractSpringBootTest {
 
   @Autowired
   private BlogItemRepository blogItemRepository;
-  @Autowired
-  private UserAccountRepository userRepository;
-
-  private final UserAccount mockUser = UserAccountMother.user();
-
-  @BeforeEach
-  void setup() {
-    userRepository.save(mockUser);
-  }
 
   @AfterEach
   void tearDown() {
-    userRepository.deleteAll();
     blogItemRepository.deleteAll();
   }
 
   @Test
   void save() {
-    BlogItem blogItem = BlogItemMother.blogItem("foo", "bar", mockUser, false);
+    BlogItem blogItem = BlogItemMother.blogItem("foo", "bar", false);
 
     BlogItem savedItem = blogItemRepository.save(blogItem);
 
@@ -45,8 +36,8 @@ class BlogItemRepositoryTest extends AbstractSpringBootTest {
 
   @Test
   void findAllByDeleted() {
-    BlogItem blogItemA = BlogItemMother.blogItem("foo", "bar", mockUser, false);
-    BlogItem blogItemB = BlogItemMother.blogItem("foo 2", "bar", mockUser, true);
+    BlogItem blogItemA = BlogItemMother.blogItem("foo", "bar",false);
+    BlogItem blogItemB = BlogItemMother.blogItem("foo 2", "bar",true);
 
     blogItemRepository.save(blogItemA);
     blogItemRepository.save(blogItemB);
@@ -62,11 +53,12 @@ class BlogItemRepositoryTest extends AbstractSpringBootTest {
 
   @Test
   void countByDeleted() {
+    System.out.println(UUID.randomUUID());
     assertThat(blogItemRepository.countAllByDeleted(true)).isZero();
     assertThat(blogItemRepository.countAllByDeleted(false)).isZero();
 
-    BlogItem blogItemA = BlogItemMother.blogItem("foo", "bar", mockUser, false);
-    BlogItem blogItemB = BlogItemMother.blogItem("foo", "bar", mockUser, true);
+    BlogItem blogItemA = BlogItemMother.blogItem("foo", "bar", false);
+    BlogItem blogItemB = BlogItemMother.blogItem("foo", "bar", true);
 
     blogItemRepository.save(blogItemA);
     blogItemRepository.save(blogItemB);

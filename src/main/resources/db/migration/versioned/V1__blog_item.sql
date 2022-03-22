@@ -9,7 +9,3 @@ create table blog_item
     created   timestamp    not null,
     updated   timestamp    not null
 );
-
-alter table blog_item
-    add constraint blog_item_poster_id_fk
-        foreign key (poster_id) references user_account;

@@ -3,15 +3,21 @@ package be.mathiasbosman.blog.security;
 import be.mathiasbosman.blog.security.SecurityContext.Authority;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
+import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
 /**
  * Security configuration for the REST Api.
@@ -20,9 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-  private final AuthenticationService authenticationService;
+public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -31,19 +35,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(@NonNull HttpSecurity http) throws Exception {
-    http.authorizeRequests()
-        .antMatchers("/rest/public/**").permitAll()
-        .antMatchers("/rest/**").hasAuthority(Authority.API_USER.name())
+    super.configure(http);
+    http.csrf().disable()
+        .authorizeRequests()
+        .antMatchers("/rest/**").hasRole(Authority.API_USER.getValue())
+        .antMatchers("/auth/*").permitAll()
         .antMatchers("/actuator/**").permitAll()
-        .anyRequest().denyAll()
-        .and()
-        .httpBasic();
+        .anyRequest().denyAll();
   }
 
   @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.eraseCredentials(true)
-        .userDetailsService(authenticationService)
-        .passwordEncoder(passwordEncoder());
+  protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+    return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
+  }
+
+  /**
+   * Tasks the {@link SimpleAuthorityMapper} to make sure roles are not prefixed with "ROLE_".
+   *
+   * @param auth {@link AuthenticationManagerBuilder}
+   */
+  @Autowired
+  public void configureGlobal(AuthenticationManagerBuilder auth) {
+    KeycloakAuthenticationProvider provider = keycloakAuthenticationProvider();
+    provider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
+    auth.authenticationProvider(provider);
   }
 }

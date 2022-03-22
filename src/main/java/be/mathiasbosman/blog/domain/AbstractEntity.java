@@ -12,7 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
  * Abstract entity holding the primary key.
  */
 @Getter
-@ToString
+@ToString(of = "id")
 @MappedSuperclass
 public abstract class AbstractEntity implements Identifiable<UUID> {
   @Id
