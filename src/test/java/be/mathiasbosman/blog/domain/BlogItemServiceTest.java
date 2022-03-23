@@ -16,26 +16,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 class BlogItemServiceTest extends AbstractSpringBootTest {
 
   @Autowired
-  private BlogItemRepository repository;
+  private BlogItemRepository blogItemRepository;
   @Autowired
   private BlogItemService service;
 
   @AfterEach
-  @BeforeEach
   void tearDown() {
-    repository.deleteAll();
+    blogItemRepository.deleteAll();
+    securityHelper.clearContext();
   }
 
   @Test
   void getItem() {
-    BlogItem item = BlogItem.builder().title("foo bar").build();
-    UUID randomId = UUID.randomUUID();
+    BlogItem item = BlogItemMother.blogItem();
 
-    repository.save(item);
+    blogItemRepository.save(item);
 
     assertThat(service.getItem(item.getId())).isNotNull();
     assertThat(item.toString()).contains("id=", "created=", "updated=", "title=", "deleted=");
-    assertThrows(NoSuchElementException.class, () -> service.getItem(randomId));
+  }
+
+  @Test
+  void getItemReturnsEmpty() {
+    assertThat(service.getItem(UUID.randomUUID())).isEmpty();
   }
 
   @Test
@@ -71,11 +74,15 @@ class BlogItemServiceTest extends AbstractSpringBootTest {
 
   @Test
   void saveItem() {
-    BlogItem blogItem = service.saveNewItem("foo", "bar");
+    securityHelper.setSecurityContextForBlogWriter();
+
+    UUID posterId = UUID.randomUUID();
+    BlogItem blogItem = service.saveNewItem("foo", "bar", posterId);
 
     assertThat(blogItem.getId()).isNotNull();
     assertThat(blogItem.getTitle()).isEqualTo("foo");
     assertThat(blogItem.getContent()).isEqualTo("bar");
+    assertThat(blogItem.getPosterId()).isEqualTo(posterId);
     assertThat(blogItem.isDeleted()).isFalse();
     assertThat(blogItem.getCreated()).isNotNull();
     assertThat(blogItem.getUpdated()).isNotNull();
@@ -83,8 +90,8 @@ class BlogItemServiceTest extends AbstractSpringBootTest {
 
   @Test
   void updateItem() {
-    BlogItem blogItem = BlogItem.builder().title("foo").content("bar").build();
-    repository.save(blogItem);
+    BlogItem blogItem = BlogItemMother.blogItem();
+    blogItemRepository.save(blogItem);
 
     BlogItem updatedItem = service.updateItem(blogItem.getId(), "oof", "rab");
 
@@ -94,8 +101,8 @@ class BlogItemServiceTest extends AbstractSpringBootTest {
 
   @Test
   void deleteItem() {
-    BlogItem blogItem = BlogItem.builder().title("foo").content("bar").build();
-    repository.save(blogItem);
+    BlogItem blogItem = BlogItemMother.blogItem();
+    blogItemRepository.save(blogItem);
 
     BlogItem deletedItem = service.deleteItem(blogItem.getId());
 
@@ -105,9 +112,9 @@ class BlogItemServiceTest extends AbstractSpringBootTest {
   private List<UUID> createBlogItems(int amount, boolean deleted) {
     List<BlogItem> savedItems = new ArrayList<>();
     for (int i = 0; i < amount; i++) {
-      savedItems.add(BlogItem.builder().title("foo bar " + i).deleted(deleted).build());
+      savedItems.add(BlogItemMother.blogItem("foo " + i, "bar", deleted));
     }
-    return savedItems.stream().map((item) -> repository.save(item).getId()).toList();
+    return savedItems.stream().map((item) -> blogItemRepository.save(item).getId()).toList();
   }
 
 }

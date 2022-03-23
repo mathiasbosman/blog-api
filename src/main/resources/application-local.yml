@@ -4,3 +4,14 @@ spring:
     username: blog
     password: bl0g
     url: jdbc:postgresql://localhost:7432/blog_db
+logging.level:
+  be: trace
+  org:
+    springframework:
+      security: debug
+keycloak:
+  auth-server-url: http://localhost:8180/auth
+  realm: blog
+  resource: blog-app
+  ssl-required: external
+  public-client: true

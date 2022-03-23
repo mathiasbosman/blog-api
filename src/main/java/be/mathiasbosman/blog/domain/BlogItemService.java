@@ -1,14 +1,21 @@
 package be.mathiasbosman.blog.domain;
 
+import be.mathiasbosman.blog.security.SecurityContext;
+import be.mathiasbosman.blog.security.SecurityContext.Authority;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Service mainly for the {@link BlogItem} entity.
+ */
 @Slf4j
 @Service
 @Transactional
@@ -18,8 +25,8 @@ public class BlogItemService {
   private final BlogItemRepository repository;
 
   @Transactional(readOnly = true)
-  public BlogItem getItem(UUID uuid) {
-    return repository.findById(uuid).orElseThrow();
+  public Optional<BlogItem> getItem(UUID uuid) {
+    return repository.findById(uuid);
   }
 
   @Transactional(readOnly = true)
@@ -34,8 +41,13 @@ public class BlogItemService {
   }
 
   @Transactional
-  public BlogItem saveNewItem(String title, String content) {
-    BlogItem item = BlogItem.builder().title(title).content(content).build();
+  @PreAuthorize("hasAuthority('blog-write')")
+  public BlogItem saveNewItem(String title, String content, UUID posterId) {
+    BlogItem item = BlogItem.builder()
+        .title(title)
+        .content(content)
+        .posterId(posterId)
+        .build();
     log.trace("Saving {}", item);
     return repository.save(item);
   }

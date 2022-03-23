@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.domain.Sort;
 
+/**
+ * The blog item entity.
+ */
 @Entity
 @Getter
 @NoArgsConstructor
@@ -22,4 +25,5 @@ public class BlogItem extends AbstractAuditedEntity implements Identifiable<UUID
   private String title;
   private String content;
   private boolean deleted;
+  private UUID posterId;
 }

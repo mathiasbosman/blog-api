@@ -13,18 +13,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import be.mathiasbosman.blog.domain.BlogItem;
 import be.mathiasbosman.blog.domain.BlogItemMother;
 import be.mathiasbosman.blog.domain.BlogItemRecord;
 import be.mathiasbosman.blog.domain.BlogItemRepository;
+import be.mathiasbosman.blog.security.SecurityContext;
+import be.mathiasbosman.blog.security.SecurityContext.Authority;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-
 
 class BlogControllerTest extends AbstractControllerTest {
 
@@ -36,8 +37,8 @@ class BlogControllerTest extends AbstractControllerTest {
   @Test
   void getBlogItems() throws Exception {
     when(repository.findAllByDeleted(anyBoolean(), any())).thenReturn(List.of(
-        BlogItemMother.blogItem("foo", "bar"),
-        BlogItemMother.blogItem("bar", "foo")
+        BlogItemMother.blogItem("foo", "bar", null, false),
+        BlogItemMother.blogItem("bar", "foo", null, false)
     ));
     when(repository.countAllByDeleted(false)).thenReturn(2L);
 
@@ -66,7 +67,7 @@ class BlogControllerTest extends AbstractControllerTest {
 
   @Test
   void postItem() throws Exception {
-
+    securityHelper.setSecurityContextForBlogWriter();
     when(repository.save(any())).thenReturn(BlogItemMother.blogItem());
 
     BlogItemRecord itemRecord = new BlogItemRecord("foo", "bar");
@@ -90,7 +91,6 @@ class BlogControllerTest extends AbstractControllerTest {
 
   @Test
   void deleteItem() throws Exception {
-
     when(repository.findById(any())).thenReturn(Optional.of(BlogItemMother.blogItem()));
     when(repository.save(any())).thenReturn(BlogItemMother.blogItem());
 

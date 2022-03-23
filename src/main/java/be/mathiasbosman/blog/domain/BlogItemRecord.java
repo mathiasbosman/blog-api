@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.NonNull;
 
+/**
+ * Record representing the {@link BlogItem} entity.
+ */
 public record BlogItemRecord(String title, String content, boolean isDeleted, UUID uuid,
                              LocalDateTime created, LocalDateTime updated) {
 
