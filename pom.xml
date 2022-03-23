@@ -109,8 +109,6 @@
             <exclude>**/security/**</exclude>
             <!-- records -->
             <exclude>**/*Record.*</exclude>
-            <!-- ControllerAdvice -->
-            <exclude>**/*ControllerAdvice.*</exclude>
           </excludes>
         </configuration>
         <executions>
