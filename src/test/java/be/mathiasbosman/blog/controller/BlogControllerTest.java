@@ -16,12 +16,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import be.mathiasbosman.blog.domain.BlogItemMother;
 import be.mathiasbosman.blog.domain.BlogItemRecord;
 import be.mathiasbosman.blog.domain.BlogItemRepository;
-import be.mathiasbosman.blog.security.SecurityContext;
-import be.mathiasbosman.blog.security.SecurityContext.Authority;
+import be.mathiasbosman.blog.domain.OAuth2UserMother;
+import be.mathiasbosman.blog.domain.OAuth2UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -30,17 +29,19 @@ import org.springframework.http.MediaType;
 class BlogControllerTest extends AbstractControllerTest {
 
   @MockBean
-  private BlogItemRepository repository;
+  private BlogItemRepository itemRepository;
+  @MockBean
+  private OAuth2UserRepository userRepository;
 
   private final ObjectMapper mapper = new ObjectMapper();
 
   @Test
   void getBlogItems() throws Exception {
-    when(repository.findAllByDeleted(anyBoolean(), any())).thenReturn(List.of(
+    when(itemRepository.findAllByDeleted(anyBoolean(), any())).thenReturn(List.of(
         BlogItemMother.blogItem("foo", "bar", null, false),
         BlogItemMother.blogItem("bar", "foo", null, false)
     ));
-    when(repository.countAllByDeleted(false)).thenReturn(2L);
+    when(itemRepository.countAllByDeleted(false)).thenReturn(2L);
 
     mvc.perform(get("/rest/items/10/10"))
         .andExpect(status().isOk())
@@ -54,7 +55,7 @@ class BlogControllerTest extends AbstractControllerTest {
 
   @Test
   void getBlogItem() throws Exception {
-    when(repository.findById(any())).thenReturn(Optional.of(BlogItemMother.blogItem()));
+    when(itemRepository.findById(any())).thenReturn(Optional.of(BlogItemMother.blogItem()));
 
     mvc.perform(get("/rest/item/" + UUID.randomUUID()))
         .andExpect(status().isOk())
@@ -67,8 +68,11 @@ class BlogControllerTest extends AbstractControllerTest {
 
   @Test
   void postItem() throws Exception {
-    securityHelper.setSecurityContextForBlogWriter();
-    when(repository.save(any())).thenReturn(BlogItemMother.blogItem());
+    securityHelper.setSecurityContext("foo", "123");
+
+    when(userRepository.getByClientIdAndExternalId(any(), any())).thenReturn(
+        OAuth2UserMother.oauth2user());
+    when(itemRepository.save(any())).thenReturn(BlogItemMother.blogItem());
 
     BlogItemRecord itemRecord = new BlogItemRecord("foo", "bar");
     mvc.perform(post("/rest/item/create")
@@ -79,8 +83,8 @@ class BlogControllerTest extends AbstractControllerTest {
 
   @Test
   void updateItem() throws Exception {
-    when(repository.findById(any())).thenReturn(Optional.of(BlogItemMother.blogItem()));
-    when(repository.save(any())).thenReturn(BlogItemMother.blogItem());
+    when(itemRepository.findById(any())).thenReturn(Optional.of(BlogItemMother.blogItem()));
+    when(itemRepository.save(any())).thenReturn(BlogItemMother.blogItem());
 
     BlogItemRecord itemRecord = new BlogItemRecord("foo", "bar");
     mvc.perform(put("/rest/item/update")
@@ -91,8 +95,8 @@ class BlogControllerTest extends AbstractControllerTest {
 
   @Test
   void deleteItem() throws Exception {
-    when(repository.findById(any())).thenReturn(Optional.of(BlogItemMother.blogItem()));
-    when(repository.save(any())).thenReturn(BlogItemMother.blogItem());
+    when(itemRepository.findById(any())).thenReturn(Optional.of(BlogItemMother.blogItem()));
+    when(itemRepository.save(any())).thenReturn(BlogItemMother.blogItem());
 
     mvc.perform(delete("/rest/item/" + UUID.randomUUID()))
         .andExpect(status().isOk());

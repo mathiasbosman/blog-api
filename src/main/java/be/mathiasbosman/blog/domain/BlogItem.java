@@ -1,7 +1,7 @@
 package be.mathiasbosman.blog.domain;
 
+import jakarta.persistence.Entity;
 import java.util.UUID;
-import javax.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import org.springframework.data.domain.Sort;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @ToString(callSuper = true, of = {"title", "deleted"})
-public class BlogItem extends AbstractAuditedEntity implements Identifiable<UUID> {
+public class BlogItem extends AbstractAuditedEntity {
 
   public static final Sort SORT_BY_DATE = Sort.by("created").descending();
 

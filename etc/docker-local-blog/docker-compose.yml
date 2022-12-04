@@ -1,7 +1,4 @@
 version: '3.1'
-volumes:
-  postgres_keycloak_data:
-    driver: local
 
 services:
   blog-local-db:
@@ -13,32 +10,3 @@ services:
       POSTGRES_DB: blog_db
       POSTGRES_USER: blog
       POSTGRES_PASSWORD: bl0g
-
-  blog-keycloak-local-db:
-    image: postgres:11
-    volumes:
-      - postgres_keycloak_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: keycloak
-      POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5433:5432"
-  blog-local-keycloak:
-    image: wizzn/keycloak:14
-    environment:
-      DB_VENDOR: POSTGRES
-      DB_ADDR: blog-keycloak-local-db
-      DB_DATABASE: keycloak
-      DB_USER: keycloak
-      DB_SCHEMA: public
-      DB_PASSWORD: password
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: password
-      KEYCLOAK_LOGLEVEL: DEBUG
-      ROOT_LOGLEVEL: DEBUG
-    ports:
-      - "8180:8080"
-      - "8443:8443"
-    depends_on:
-      - blog-keycloak-local-db

@@ -1,15 +1,12 @@
 package be.mathiasbosman.blog.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import be.mathiasbosman.blog.AbstractSpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,7 +20,6 @@ class BlogItemServiceTest extends AbstractSpringBootTest {
   @AfterEach
   void tearDown() {
     blogItemRepository.deleteAll();
-    securityHelper.clearContext();
   }
 
   @Test
@@ -74,8 +70,6 @@ class BlogItemServiceTest extends AbstractSpringBootTest {
 
   @Test
   void saveItem() {
-    securityHelper.setSecurityContextForBlogWriter();
-
     UUID posterId = UUID.randomUUID();
     BlogItem blogItem = service.saveNewItem("foo", "bar", posterId);
 

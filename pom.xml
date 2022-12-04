@@ -3,82 +3,6 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.5</version>
-    <relativePath/> <!-- lookup parent from repository -->
-  </parent>
-
-  <groupId>be.mathiasbosman</groupId>
-  <artifactId>blog-api</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>blog api</name>
-  <description>blog api</description>
-
-  <properties>
-    <java.language.version>17</java.language.version>
-    <maven.compiler.source>${java.language.version}</maven.compiler.source>
-    <maven.compiler.target>${java.language.version}</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <!-- sonar cloud -->
-    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-    <sonar.organization>mathiasbosman</sonar.organization>
-  </properties>
-
-  <dependencies>
-    <dependency>
-      <artifactId>spring-boot-starter-web</artifactId>
-      <groupId>org.springframework.boot</groupId>
-    </dependency>
-    <dependency>
-      <artifactId>spring-boot-starter-security</artifactId>
-      <groupId>org.springframework.boot</groupId>
-    </dependency>
-    <dependency>
-      <groupId>org.keycloak</groupId>
-      <artifactId>keycloak-spring-boot-starter</artifactId>
-      <version>19.0.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-    <dependency>
-      <artifactId>spring-boot-starter-data-jpa</artifactId>
-      <groupId>org.springframework.boot</groupId>
-    </dependency>
-    <dependency>
-      <artifactId>postgresql</artifactId>
-      <groupId>org.postgresql</groupId>
-    </dependency>
-    <dependency>
-      <artifactId>flyway-core</artifactId>
-      <groupId>org.flywaydb</groupId>
-    </dependency>
-    <dependency>
-      <artifactId>h2</artifactId>
-      <groupId>com.h2database</groupId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <artifactId>spring-security-test</artifactId>
-      <groupId>org.springframework.security</groupId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <groupId>org.springframework.boot</groupId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <artifactId>lombok</artifactId>
-      <groupId>org.projectlombok</groupId>
-      <optional>true</optional>
-    </dependency>
-  </dependencies>
-
-
   <build>
     <plugins>
       <plugin>
@@ -126,10 +50,85 @@
           </execution>
         </executions>
         <groupId>org.jacoco</groupId>
-        <version>0.8.7</version>
+        <version>0.8.8</version>
       </plugin>
     </plugins>
   </build>
+
+  <groupId>be.mathiasbosman</groupId>
+  <artifactId>blog-api</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>blog api</name>
+  <description>blog api</description>
+
+  <properties>
+    <java.language.version>17</java.language.version>
+    <maven.compiler.source>${java.language.version}</maven.compiler.source>
+    <maven.compiler.target>${java.language.version}</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- sonar cloud -->
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <sonar.organization>mathiasbosman</sonar.organization>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>spring-boot-starter-security</artifactId>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>spring-boot-starter-oauth2-client</artifactId>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>postgresql</artifactId>
+      <groupId>org.postgresql</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>flyway-core</artifactId>
+      <groupId>org.flywaydb</groupId>
+    </dependency>
+    <dependency>
+      <artifactId>h2</artifactId>
+      <groupId>com.h2database</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>spring-security-test</artifactId>
+      <groupId>org.springframework.security</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>lombok</artifactId>
+      <groupId>org.projectlombok</groupId>
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
+
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.0.0</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
 
 
 </project>
