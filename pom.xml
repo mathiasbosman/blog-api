@@ -27,12 +27,6 @@
           <excludes>
             <!-- main application class -->
             <exclude>**/BlogApplication.*</exclude>
-            <!-- hibernate classes -->
-            <exclude>**/AbstractAuditedEntity.*</exclude>
-            <!-- security -->
-            <exclude>**/security/**</exclude>
-            <!-- records -->
-            <exclude>**/*Record.*</exclude>
           </excludes>
         </configuration>
         <executions>

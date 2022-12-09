@@ -1,6 +1,5 @@
 package be.mathiasbosman.blog.security;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 public class SecurityConfig implements RepositoryRestConfigurer {
 
   @Bean
-  public SecurityFilterChain filterChain(@NonNull HttpSecurity http) throws Exception {
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests()
         .requestMatchers("/actuator/**").permitAll()
         .requestMatchers(HttpMethod.GET).permitAll()
