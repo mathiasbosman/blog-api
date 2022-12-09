@@ -1,10 +1,9 @@
 package be.mathiasbosman.blog.security;
 
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
-import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -14,12 +13,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig implements RepositoryRestConfigurer {
+public class SecurityConfig {
 
   private final UserDetailsService userDetailsService;
 
@@ -30,17 +29,17 @@ public class SecurityConfig implements RepositoryRestConfigurer {
         .requestMatchers(HttpMethod.GET).permitAll()
         .anyRequest().hasRole(SecurityContext.Role.USER.name())
         .and()
-        .httpBasic();
+        .httpBasic()
+        .and()
+        .cors().configurationSource(resource -> corsConfiguration());
 
     return http.build();
   }
 
-  @Override
-  public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config,
-      CorsRegistry cors) {
-    cors.addMapping("/**")
-        .allowedOrigins("http://localhost:3000");
-    RepositoryRestConfigurer.super.configureRepositoryRestConfiguration(config, cors);
+  private CorsConfiguration corsConfiguration() {
+    var config = new CorsConfiguration();
+    config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+    return config;
   }
 
   @Bean
