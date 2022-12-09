@@ -1,11 +1,9 @@
 package be.mathiasbosman.blog.security;
 
-import be.mathiasbosman.blog.domain.BlogException;
 import java.util.Map;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.event.Level;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -39,7 +37,7 @@ public class SecurityContext {
     return getAuthentication()
         .flatMap(SecurityContext::token)
         .map(OAuth2AuthenticationToken::getAuthorizedClientRegistrationId)
-        .orElseThrow(() -> new BlogException(Level.ERROR, "Could not determine OAuth client id"));
+        .orElseThrow(() -> new SecurityException("Could not determine OAuth client id"));
   }
 
   private static String getAttribute(GithubAttribute attribute) {
@@ -47,14 +45,14 @@ public class SecurityContext {
     if (attributes.containsKey(attribute.getAttributeKey())) {
       return attributes.get(attribute.getAttributeKey()).toString();
     }
-    throw new BlogException(Level.ERROR, "Could not determine OAuth attribute %s", attribute);
+    throw new SecurityException("Could not determine OAuth attribute " + attribute);
   }
 
   private static Map<String, Object> getAttributes() {
     return getAuthentication()
         .flatMap(SecurityContext::principal)
         .map(OAuth2AuthenticatedPrincipal::getAttributes)
-        .orElseThrow(() -> new BlogException(Level.ERROR,
+        .orElseThrow(() -> new SecurityException(
             "No OAuth2 attributes found in the security context"));
 
   }

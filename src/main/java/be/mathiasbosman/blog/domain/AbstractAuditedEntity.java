@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 @Getter
 @MappedSuperclass
 @ToString(callSuper = true)
-public abstract class AbstractAuditedEntity extends AbstractEntity implements AuditableEntity {
+public abstract class AbstractAuditedEntity extends AbstractEntity {
 
   @Column(updatable = false)
   @DateTimeFormat(iso = ISO.DATE_TIME)
