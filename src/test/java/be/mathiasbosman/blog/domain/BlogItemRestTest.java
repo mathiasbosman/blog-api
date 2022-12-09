@@ -10,20 +10,15 @@ import be.mathiasbosman.blog.AbstractSpringBootTest;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 
 @AutoConfigureMockMvc
-@AutoConfigureTestEntityManager
 class BlogItemRestTest extends AbstractSpringBootTest {
 
   private static final String jsonItemsPath = "$._embedded.items";
   @Autowired
   private MockMvc mvc;
-  @Autowired
-  private TestEntityManager entityManager;
 
   @Test
   void getItems_noResults() throws Exception {
