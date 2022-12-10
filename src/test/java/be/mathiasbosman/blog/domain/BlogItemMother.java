@@ -13,7 +13,6 @@ public class BlogItemMother {
         .excerpt("excerpt - lorem ipsum" + uuid)
         .content("lorem ipsum " + uuid)
         .poster(poster)
-        .deleted(false)
         .build();
   }
 

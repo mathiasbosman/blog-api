@@ -29,7 +29,7 @@ class BlogItemRestTest extends AbstractMvcTest<BlogItem> {
     item.setContent("new content");
     entityManager.persist(item);
 
-    mvc.perform(get("/items"))
+    mvc.perform(get(endpoint()))
         .andExpect(status().isOk())
         .andExpect(jsonPath(jsonItemsPath, hasSize(1)))
         .andExpect(jsonPath(jsonItemsPath + ".[0].content", is("new content")))
@@ -41,14 +41,14 @@ class BlogItemRestTest extends AbstractMvcTest<BlogItem> {
   void getItem_allFields() throws Exception {
     BlogItem item = entityManager.persist(createRandomEntity());
 
-    mvc.perform(get("/items/" + item.getId()))
+    mvc.perform(get(endpoint(item.getId())))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.created").exists())
         .andExpect(jsonPath("$.updated").exists())
         .andExpect(jsonPath("$.title").exists())
         .andExpect(jsonPath("$.excerpt").exists())
         .andExpect(jsonPath("$.content").exists())
-        .andExpect(jsonPath("$.deleted").exists())
+        .andExpect(jsonPath("$.featured").exists())
         .andExpect(jsonPath("$._links.poster").exists());
   }
 
@@ -56,9 +56,28 @@ class BlogItemRestTest extends AbstractMvcTest<BlogItem> {
   void getItem_nullableFields() throws Exception {
     BlogItem item = entityManager.persist(createRandomEntity().toBuilder().excerpt(null).build());
 
-    mvc.perform(get("/items/" + item.getId()))
+    mvc.perform(get(endpoint(item.getId())))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.excerpt").isEmpty());
+  }
+
+  @Test
+  void searchItemsByFeatured() throws Exception {
+    BlogUser user = entityManager.persist(BlogUserMother.randomBlogUser());
+
+    entityManager.persist(BlogItemMother.randomBlogItem(user));
+    entityManager.persist(BlogItemMother.randomBlogItem(user).toBuilder().featured(true).build());
+    entityManager.persist(BlogItemMother.randomBlogItem(user).toBuilder().featured(true).build());
+
+    mvc.perform(get(endpoint("search", "findAllByFeatured"))
+            .queryParam("featured", "false"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.page.totalElements", is(1)));
+
+    mvc.perform(get(endpoint("search", "findAllByFeatured"))
+            .queryParam("featured", "true"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.page.totalElements", is(2)));
   }
 
 }

@@ -16,7 +16,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@ToString(callSuper = true, of = {"title", "deleted"})
+@ToString(callSuper = true, of = {"title", "featured"})
 public class BlogItem extends AbstractAuditedEntity {
 
   @NotNull
@@ -26,8 +26,6 @@ public class BlogItem extends AbstractAuditedEntity {
 
   @NotNull
   private String content;
-
-  private boolean deleted;
 
   private boolean featured;
 
