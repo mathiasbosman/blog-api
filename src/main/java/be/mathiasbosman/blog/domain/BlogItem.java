@@ -29,6 +29,8 @@ public class BlogItem extends AbstractAuditedEntity {
 
   private boolean deleted;
 
+  private boolean featured;
+
   @NotNull
   @ManyToOne
   private BlogUser poster;
