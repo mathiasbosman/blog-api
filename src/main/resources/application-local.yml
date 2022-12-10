@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: blog
+    password: bl0g
+    url: jdbc:postgresql://localhost:7432/blog_db
+
+logging.level:
+  be: trace
+  org:
+    springframework:
+      security: debug
+management:
+  endpoints:
+    web:
+      cors:
+        allowed-origins: http://localhost:3000
