@@ -25,6 +25,10 @@ public class BlogItem extends AbstractAuditedEntity {
   public static final Sort SORT_BY_DATE = Sort.by("created").descending();
 
   private String title;
+
+  private String excerpt;
+
+  @NotNull
   private String content;
   private boolean deleted;
   private UUID posterId;
