@@ -11,7 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 /**
- * Abstract class for entities that have an audit trail.
+ * Simple abstract class for entities that have an audit trail.
  */
 @Getter
 @MappedSuperclass
