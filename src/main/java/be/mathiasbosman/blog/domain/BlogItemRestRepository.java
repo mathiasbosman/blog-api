@@ -12,5 +12,5 @@ public interface BlogItemRestRepository extends
     PagingAndSortingRepository<BlogItem, UUID>, CrudRepository<BlogItem, UUID> {
 
   Page<BlogItem> findAllByFeatured(Pageable pageable,
-      boolean featured); //todo test for unused warning
+      boolean featured);
 }
