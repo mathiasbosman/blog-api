@@ -6,12 +6,13 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class BlogItemMother {
 
-  public static BlogItem randomBlogItem() {
+  public static BlogItem randomBlogItem(BlogUser poster) {
+    UUID uuid = UUID.randomUUID();
     return BlogItem.builder()
-        .title("foo bar " + UUID.randomUUID())
-        .content("lorem ipsum " + UUID.randomUUID())
-        .posterId(UUID.randomUUID())
-        .deleted(false)
+        .title("foo bar " + uuid)
+        .excerpt("excerpt - lorem ipsum" + uuid)
+        .content("lorem ipsum " + uuid)
+        .poster(poster)
         .build();
   }
 

@@ -10,7 +10,7 @@ public class SecurityContext {
   }
 
   public static GrantedAuthority basicAuthority() {
-    return new SimpleGrantedAuthority(Role.USER.name());
+    return new SimpleGrantedAuthority("ROLE_" + Role.USER.name());
   }
 
   public enum Role {

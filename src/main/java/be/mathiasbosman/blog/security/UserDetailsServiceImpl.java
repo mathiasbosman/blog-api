@@ -27,6 +27,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     return new User(blogUser.getUsername(), blogUser.getPassword(), List.of(
         SecurityContext.basicAuthority()
     ));
-
   }
 }
