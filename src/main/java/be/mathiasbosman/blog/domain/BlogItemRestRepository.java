@@ -11,6 +11,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 public interface BlogItemRestRepository extends
     PagingAndSortingRepository<BlogItem, UUID>, CrudRepository<BlogItem, UUID> {
 
-  Page<BlogItem> findAllByFeatured(Pageable pageable,
-      boolean featured);
+  Page<BlogItem> findAllByFeatured(Pageable pageable, boolean featured);
 }
