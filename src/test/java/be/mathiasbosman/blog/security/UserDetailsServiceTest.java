@@ -43,6 +43,6 @@ class UserDetailsServiceTest extends AbstractSpringBootTest {
     assertThat(userDetails.getAuthorities())
         .hasSize(1)
         .first()
-        .satisfies(auth -> assertThat(auth.getAuthority()).isEqualTo(Role.USER.name()));
+        .satisfies(auth -> assertThat(auth.getAuthority()).contains(Role.USER.name()));
   }
 }
