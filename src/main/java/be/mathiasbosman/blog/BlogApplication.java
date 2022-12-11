@@ -3,9 +3,6 @@ package be.mathiasbosman.blog;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * Root application class.
- */
 @SpringBootApplication
 public class BlogApplication {
 

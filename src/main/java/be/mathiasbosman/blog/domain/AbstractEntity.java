@@ -8,9 +8,6 @@ import lombok.Getter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
-/**
- * Abstract entity holding the primary key.
- */
 @Getter
 @ToString(of = "id")
 @MappedSuperclass

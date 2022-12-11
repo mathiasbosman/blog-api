@@ -10,9 +10,6 @@ import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-/**
- * Simple abstract class for entities that have an audit trail.
- */
 @Getter
 @MappedSuperclass
 @ToString(callSuper = true)
