@@ -3,6 +3,7 @@ package be.mathiasbosman.blog.configuration;
 import be.mathiasbosman.blog.domain.BlogUser;
 import be.mathiasbosman.blog.domain.BlogUserRepository;
 import jakarta.annotation.PostConstruct;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -26,7 +27,7 @@ public class BlogConfigService {
       return;
     }
     String username = "admin";
-    String password = "password";
+    String password = UUID.randomUUID().toString();
     log.warn("No users found. Creating default user with username: {} and password: {}",
         username, password);
     userRepository.save(
