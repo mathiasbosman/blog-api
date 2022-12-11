@@ -22,7 +22,7 @@ public class BlogConfigService {
 
   @PostConstruct
   @Transactional
-  void initAdminUser() {
+  public void initAdminUser() {
     if (0 < userRepository.count()) {
       return;
     }
