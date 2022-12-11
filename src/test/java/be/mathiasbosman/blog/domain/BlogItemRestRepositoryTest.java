@@ -23,4 +23,13 @@ class BlogItemRestRepositoryTest extends AbstractSpringBootTest {
     assertThat(repository.findAllByFeatured(Pageable.unpaged(), true).getTotalElements())
         .isEqualTo(1);
   }
+
+  @Test
+  void getByPermalink() {
+    BlogUser user = entityManager.persist(BlogUserMother.randomBlogUser());
+    BlogItem item = entityManager.persist(BlogItemMother.randomBlogItem(user));
+
+    assertThat(repository.getByPermalink("zever")).isEmpty();
+    assertThat(repository.getByPermalink(item.getPermalink())).isNotEmpty();
+  }
 }

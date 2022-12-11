@@ -49,6 +49,7 @@ class BlogItemRestTest extends AbstractMvcTest<BlogItem> {
         .andExpect(jsonPath("$.excerpt").exists())
         .andExpect(jsonPath("$.content").exists())
         .andExpect(jsonPath("$.featured").exists())
+        .andExpect(jsonPath("$.permalink").exists())
         .andExpect(jsonPath("$._links.poster").exists());
   }
 

@@ -26,13 +26,19 @@ public abstract class AbstractAuditedEntity extends AbstractEntity {
   private LocalDateTime updated;
 
   @PrePersist
-  void prePersist() {
+  void prePersistHandler() {
     created = LocalDateTime.now();
     updated = created;
+    prePersist();
   }
 
   @PreUpdate
   void preUpdate() {
     updated = LocalDateTime.now();
+  }
+
+  void prePersist() {
+    created = LocalDateTime.now();
+    updated = created;
   }
 }

@@ -1,5 +1,6 @@
 package be.mathiasbosman.blog.domain;
 
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,4 +13,6 @@ public interface BlogItemRestRepository extends
     PagingAndSortingRepository<BlogItem, UUID>, CrudRepository<BlogItem, UUID> {
 
   Page<BlogItem> findAllByFeatured(Pageable pageable, boolean featured);
+
+  Optional<BlogItem> getByPermalink(String permalink);
 }
