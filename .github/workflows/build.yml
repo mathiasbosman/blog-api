@@ -1,23 +1,31 @@
 name: Build
-on: pull_request
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
 
 jobs:
   build:
     name: Test and build 🧪
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Set up JDK 17
+      - name: "☁️ checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "🔧 setup JDK"
         uses: actions/setup-java@v3.6.0
         with:
           java-version: 17
           distribution: adopt
           cache: maven
-      - name: Build
+
+      - name: "🧪 run tests"
         run: mvn -B verify
-      - name: Sonar
+
+      - name: "🔍 sonar scan code"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

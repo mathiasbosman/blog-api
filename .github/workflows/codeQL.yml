@@ -1,8 +1,11 @@
-name: Code QL
+name: CodeQL
 on:
+  push:
+    branches: [ master ]
   pull_request:
   schedule:
     - cron: '43 9 * * 3'
+
 
 jobs:
   analyze:

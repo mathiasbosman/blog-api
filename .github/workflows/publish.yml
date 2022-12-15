@@ -1,43 +1,31 @@
 name: Release
 on:
-  release:
-    types: [ published ]
+  push:
+    tags:
+      - '*'
 
 jobs:
   test:
-    name: Test run 🧪
+    name: Update and deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 17
+      - name: "☁️ checkout repository"
+        uses: actions/checkout@v3
+        with:
+          ref: master
+          token: ${{ secrets.RELEASE_TOKEN }}
+
+      - name: "🔧 setup JDK"
         uses: actions/setup-java@v3
         with:
           java-version: 17
           distribution: adopt
           cache: maven
+
       - name: Maven verify
         run: mvn -B verify
 
-  release:
-    name: Release and deploy 📦
-    needs: test
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      actions: write
-      repository-projects: write
-      packages: write
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: master
-      - uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: adopt
-          cache: maven
-      - name: Release package
+      - name: "📦 update version"
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "actions@github.com"
