@@ -4,5 +4,12 @@ spring:
     username: blog
     password: bl0g
     url: jdbc:postgresql://localhost:7432/blog_db
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: 53034061388be1147ec1
+            clientSecret: 77210a8033b0168fa368645b5ed87d889e9509a6
 logging.level:
   be: trace

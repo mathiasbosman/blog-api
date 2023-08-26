@@ -1,0 +1,22 @@
+changelog:
+  exclude:
+    labels:
+      - github_actions
+  categories:
+    - title: 🐛 Bug fixes
+      labels:
+        - bug
+    - title: 🛠 Breaking Changes
+      labels:
+        - breaking-change
+    - title: 🎉 Features
+      labels:
+        - '*'
+      exclude:
+        labels:
+          - dependencies
+          - breaking-change
+          - bug
+    - title: 🧙 Dependencies
+      labels:
+        - dependencies
